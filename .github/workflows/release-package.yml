@@ -1,0 +1,49 @@
+name: Create DBI Release
+
+on:
+  workflow_dispatch:  
+    inputs:
+      version:
+        type: string
+        required: true
+
+jobs:
+  create-new-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download files
+        run: |
+          curl -LJO https://github.com/rashevskyv/dbi/releases/latest/download/DBI.nro
+          curl -LJO https://github.com/rashevskyv/dbi/releases/latest/download/dbi.config
+      - name: Archive files
+        run: |
+          mkdir -p switch/DBI
+          mv DBI.nro switch/DBI/
+          mv dbi.config switch/DBI/
+          zip -r DBI.zip switch/
+          
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ inputs.version }}
+          release_name: Release ${{ inputs.version }}
+          body: |
+            New release of DBI zip.
+          draft: false
+          prerelease: false
+      - name: Upload release asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./DBI.zip
+          asset_name: DBI.zip
+          asset_content_type: application/zip
