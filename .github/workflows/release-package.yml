@@ -1,11 +1,7 @@
-name: Create DBI Release
+name: Create Clean SigPatches Release
 
 on:
-  workflow_dispatch:  
-    inputs:
-      version:
-        type: string
-        required: true
+  workflow_dispatch:
 
 jobs:
   create-new-release:
@@ -14,16 +10,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Download files
+      - name: Download and unzip
+        uses: schmiddim/action-wget-unzip@v2
+        with:
+          url: 'https://sigmapatches.coomer.party/sigpatches.zip'
+          destination: /tmp/sigpatches
+        
+      - name: Clean content
         run: |
-          curl -LJO https://github.com/rashevskyv/dbi/releases/latest/download/DBI.nro
-          curl -LJO https://github.com/rashevskyv/dbi/releases/latest/download/dbi.config
+          rm -rf /tmp/sigpatches/atmosphere/contents
+
       - name: Archive files
         run: |
-          mkdir -p switch/DBI
-          mv DBI.nro switch/DBI/
-          mv dbi.config switch/DBI/
-          zip -r DBI.zip switch/
+          cd /tmp/sigpatches
+          zip -r CleanSigPatches.zip *
           
       - name: Create release
         id: create_release
@@ -31,10 +31,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ inputs.version }}
-          release_name: Release ${{ inputs.version }}
+          tag_name: $GITHUB_RUN_NUMBER
+          release_name: Release $GITHUB_RUN_NUMBER
           body: |
-            New release of DBI zip.
+            New release of CleanSigPatches zip.
           draft: false
           prerelease: false
       - name: Upload release asset
@@ -44,6 +44,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./DBI.zip
-          asset_name: DBI.zip
+          asset_path: .//tmp/sigpatches/CleanSigPatches.zip
+          asset_name: CleanSigPatches.zip
           asset_content_type: application/zip
