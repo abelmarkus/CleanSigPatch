@@ -11,10 +11,9 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Download and unzip
-        uses: schmiddim/action-wget-unzip@v2
-        with:
-          url: 'https://sigmapatches.coomer.party/sigpatches.zip'
-          destination: /tmp/sigpatches
+        run: |
+          curl -LJO https://sigmapatches.coomer.party/sigpatches.zip
+          unzip sigpatches.zip -d /tmp/sigpatches
         
       - name: Clean content
         run: |
