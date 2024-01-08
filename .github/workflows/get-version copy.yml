@@ -1,0 +1,22 @@
+name: Get Version (Date)
+on:
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Extract date
+        run: |
+          # URL of the webpage you want to extract from
+          url="https://sigmapatches.coomer.party/"
+          
+          # Use curl to get the webpage content
+          content=$(curl -s "$url")
+          
+          # Use grep to find the line with title="sigpatches" and extract the date
+          date=$(echo "$content" | grep -o 'title="sigpatches".*href="/sigpatches.zip?[0-9]\{2\}\.[0-9]\{2\}\.[0-9]\{4\}' | grep -o '[0-9]\{2\}\.[0-9]\{2\}\.[0-9]\{4\}')
+          
+          echo "Date: $date"
