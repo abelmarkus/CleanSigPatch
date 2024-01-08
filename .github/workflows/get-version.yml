@@ -1,8 +1,6 @@
-name: Extract Date
+name: Get Version (Date)
 on:
-  push:
-    branches:
-      - main
+  woworkflow_dispatch:
 
 jobs:
   extract:
@@ -27,13 +25,13 @@ jobs:
   
           axios.get(url).then(response => {
             const $ = cheerio.load(response.data);
-            const field = $('[title=\"sigpatches\"]');
+            const field = $('[title=\'sigpatches\']');
             if (field.length) {
               const href = field.attr('href');  // get the href attribute
               const date = href.split('?')[1];  // split on '?' and take the second part
               console.log(`Date: ${date}`);
             } else {
-              console.log('Field with title=\"sigpatches\" not found.');
+              console.log('Field with title=\'sigpatches\' not found.');
             }
           }).catch(error => {
             console.error(`Failed to fetch page: ${error}`);
