@@ -1,6 +1,6 @@
 name: Get Version (Date)
 on:
-  woworkflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   extract:
