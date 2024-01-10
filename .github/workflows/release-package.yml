@@ -1,5 +1,5 @@
 name: Create Clean SigPatches Release
-run-name: ${{ github.event_name }} ${{ inputs.version }}
+run-name: ${{ github.ref_name }} ${{ inputs.version }}
 
 on:
   workflow_dispatch:
