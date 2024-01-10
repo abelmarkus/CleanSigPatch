@@ -28,9 +28,15 @@ jobs:
           echo "Date Latest: $date_latest"
           echo "Date My Release: $date_my_release"
 
+          # Convert to YYYY-MM-DD format
+          converted_valid_gnu_date_latest="${date_latest:6:4}-${date_latest:0:2}-${date_latest:3:2}"
+          converted_valid_gnu_date_my_release="${date_my_release:6:4}-${date_my_release:0:2}-${date_my_release:3:2}"
+          echo "Converted Date Latest: $converted_valid_gnu_date_latest"
+          echo "Converted Date My Release: $converted_valid_gnu_date_my_release"
+
           # Convert dates to seconds since the UNIX epoch
-          date_latest_seconds=$(date -f "%m.%d.%Y" "$date_latest")
-          date_my_release_seconds=$(date -f "%m.%d.%Y" "$date_my_release")
+          date_latest_seconds=$(date -d "$converted_valid_gnu_date_latest" +%s)
+          date_my_release_seconds=$(date -d "$converted_valid_gnu_date_my_release" +%s)
 
           # Compare the integers
           echo "release=false" >> $GITHUB_OUTPUT
