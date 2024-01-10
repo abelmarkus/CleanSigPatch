@@ -1,0 +1,53 @@
+name: Check Version (Date)
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check version (date)
+        id: check_version
+        run: |
+          # URL of the webpage you want to extract from
+          url="https://sigmapatches.coomer.party/"
+          
+          # Use curl to get the webpage content
+          content=$(curl -s "$url")
+          
+          # Use grep to find the line with title="sigpatches" and extract the date
+          date_latest=$(echo "$content" | grep -o '.*href="/sigpatches.zip?[0-9]\{2\}\.[0-9]\{2\}\.[0-9]\{4\}' | grep -o '[0-9]\{2\}\.[0-9]\{2\}\.[0-9]\{4\}'| head -n 1)
+          
+          date_my_release="05.27.2023"
+
+          echo "Date Latest: $date_latest"
+          echo "Date My Release: $date_my_release"
+
+          # Convert dates to seconds since the UNIX epoch
+          date_latest_seconds=$(date -d "$date_latest" +%s)
+          date_my_release_seconds=$(date -d "$date_my_release" +%s)
+
+          # Compare the integers
+          echo "release=false" >> $GITHUB_OUTPUT
+          if [ $date_latest_seconds -gt $date_my_release_seconds ]
+          then
+              echo "Latest is newer then my release, dispatching new release..."
+              echo "release=true" >> $GITHUB_OUTPUT
+              echo "version=$date_latest" >> $GITHUB_OUTPUT
+          else
+              echo "Nothing to do here!"
+          fi
+
+      - name: Dispatch a new release creation
+        if: ${{ steps.check_version.outputs.release == 'true' }}
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: release-package.yml
+          inputs: '{
+              "version": "${{ steps.check_version.outputs.version }}"
+            }'
