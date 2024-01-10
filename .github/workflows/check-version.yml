@@ -41,7 +41,7 @@ jobs:
           then
               echo "Latest is newer then my release, dispatching new release..."
               echo "release=true" >> $GITHUB_OUTPUT
-              echo "version=$date_latest" >> $GITHUB_OUTPUT
+              echo "version=$converted_valid_gnu_date_latest" >> $GITHUB_OUTPUT
           else
               echo "Nothing to do here!"
           fi
