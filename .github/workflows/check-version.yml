@@ -29,8 +29,8 @@ jobs:
           echo "Date My Release: $date_my_release"
 
           # Convert dates to seconds since the UNIX epoch
-          date_latest_seconds=$(date -f "%m.%d.%Y" "$date_latest" +%s)
-          date_my_release_seconds=$(date -f "%m.%d.%Y" "$date_my_release" +%s)
+          date_latest_seconds=$(date -f "%m.%d.%Y" "$date_latest")
+          date_my_release_seconds=$(date -f "%m.%d.%Y" "$date_my_release")
 
           # Compare the integers
           echo "release=false" >> $GITHUB_OUTPUT
