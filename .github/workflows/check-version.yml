@@ -15,8 +15,7 @@ jobs:
         id: check_version
         run: |
           # URL of the webpage you want to extract from
-          #url="https://sigmapatches.su/"
-          url="https://sigmapatches.coomer.party/"
+          url="https://sigmapatches.su/"
           
           # Use curl to get the webpage content
           content=$(curl -s "$url")
