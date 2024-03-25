@@ -54,9 +54,13 @@ jobs:
 
       - name: Dispatch a new release creation
         if: ${{ steps.check_version.outputs.release == 'true' }}
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: release-package.yml
-          inputs: '{
-              "version": "${{ steps.check_version.outputs.version }}"
-            }'
+        # uses: benc-uk/workflow-dispatch@v1
+        # with:
+        #  workflow: release-package.yml
+        #  inputs: '{
+        #      "version": "${{ steps.check_version.outputs.version }}"
+        #    }'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run release-package.yml -f version="${{ steps.check_version.outputs.version }}"
