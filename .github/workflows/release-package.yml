@@ -35,18 +35,3 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ inputs.version }} /tmp/sigpatches/CleanSigPatches.zip --notes "Latest release of CleanSigPatches zip."
-
-#      - name: Upload release asset
-#        id: upload-release-asset
-        # uses: actions/upload-release-asset@v1
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # with:
-        #   upload_url: ${{ steps.create_release.outputs.upload_url }}
-        #   asset_path: /tmp/sigpatches/CleanSigPatches.zip
-        #   asset_name: CleanSigPatches.zip
-        #   asset_content_type: application/zip
-#        env:
-#          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          gh release upload ${{ inputs.version }} /tmp/sigpatches/CleanSigPatches.zip
