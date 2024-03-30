@@ -31,23 +31,13 @@ jobs:
           
       - name: Create release
         id: create_release
-        # uses: actions/create-release@v1
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # with:
-        #   tag_name: ${{ inputs.version }}
-        #   release_name: Release ${{ inputs.version }}
-        #   body: |
-        #     Latest release of CleanSigPatches zip.
-        #   draft: false
-        #   prerelease: false
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ inputs.version }} /tmp/sigpatches/CleanSigPatches.zip --notes "Latest release of CleanSigPatches zip."
 
-      - name: Upload release asset
-        id: upload-release-asset
+#      - name: Upload release asset
+#        id: upload-release-asset
         # uses: actions/upload-release-asset@v1
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,7 +46,7 @@ jobs:
         #   asset_path: /tmp/sigpatches/CleanSigPatches.zip
         #   asset_name: CleanSigPatches.zip
         #   asset_content_type: application/zip
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release upload ${{ inputs.version }} /tmp/sigpatches/CleanSigPatches.zip
+#        env:
+#          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          gh release upload ${{ inputs.version }} /tmp/sigpatches/CleanSigPatches.zip
