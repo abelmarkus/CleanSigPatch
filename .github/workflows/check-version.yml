@@ -25,7 +25,7 @@ jobs:
           echo "Date Latest: $date_latest"
           if [ -n "$date_latest" ]; then
             # Convert to YYYY-MM-DD format
-            converted_valid_gnu_date_latest="${date_latest:6:4}-${date_latest:0:2}-${date_latest:3:2}"
+            converted_valid_gnu_date_latest="${date_latest:6:4}-${date_latest:3:2}-${date_latest:0:2}"
   
             # read my version/date as my last release version
             date_my_release=$(curl -s https://api.github.com/repos/abelmarkus/cleansigpatch/releases/latest | jq -r '.tag_name')
