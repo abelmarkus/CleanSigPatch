@@ -21,13 +21,13 @@ jobs:
           content=$(curl -s "$url")
           
           # Use grep to find the line with title="sigpatches" and extract the date
-          date_latest=$(echo "$content" | grep -o '.*href="/sigpatches.zip?[0-9]\{2\}\.[0-9]\{2\}\.[0-9]\{4\}' | grep -o '[0-9]\{2\}\.[0-9]\{2\}\.[0-9]\{4\}'| head -n 1)
+          date_latest=$(echo "$content" | grep -o '.*href="/sigpatches.zip?[0-9]\{2\}\.[0-9]\{2\}\.[0-9]\{4\}' | grep -o '[0-9]\{2\}\.[0-9]\{2\}\.[0-9]\{4\}' | head -n 1)
           echo "Date Latest: $date_latest"
-          if [ -n "$date_latest" ]; then
+          if [[ -n "$date_latest" ]]; then
             # Convert to YYYY-MM-DD format
             converted_valid_gnu_date_latest="${date_latest:6:4}-${date_latest:3:2}-${date_latest:0:2}"
   
-            # read my version/date as my last release version
+            # Read my version/date as my last release version
             date_my_release=$(curl -s https://api.github.com/repos/abelmarkus/cleansigpatch/releases/latest | jq -r '.tag_name')
             
             echo "Converted Date Latest: $converted_valid_gnu_date_latest"
@@ -39,9 +39,8 @@ jobs:
   
             # Compare the integers
             echo "release=false" >> $GITHUB_OUTPUT
-            if [ $date_latest_seconds -gt $date_my_release_seconds ]
-            then
-                echo "Latest is newer then my release, dispatching new release..."
+            if (( date_latest_seconds > date_my_release_seconds )); then
+                echo "Latest is newer than my release, dispatching new release..."
                 echo "release=true" >> $GITHUB_OUTPUT
                 echo "version=$converted_valid_gnu_date_latest" >> $GITHUB_OUTPUT
             else
